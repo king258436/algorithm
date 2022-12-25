@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+//첫 번째 수가 두 번째 수보다 큰지 구하는 
+int main(){
+    int x, y;
+    
+    for(;;)
+    {
+        scanf("%d %d", &x, &y);
+        
+        if(x == 0 && y == 0)
+            break;
+            
+        x > y ? printf("Yes\n") : printf("No\n");
+    }
+}
