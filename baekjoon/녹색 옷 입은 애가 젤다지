@@ -1,0 +1,91 @@
+#include<iostream>
+#include<queue>
+
+#define MAX 126
+#define INF 1e9
+using namespace std;
+int map[MAX][MAX];
+int dist[MAX][MAX];
+int n;
+int dy[] = {0, 0, -1, 1};
+int dx[] = {1, -1, 0, 0};
+
+struct Point {
+    int y;
+    int x;
+    int dis;
+};
+
+struct cmp {
+    bool operator()(Point a, Point b) {
+        return a.dis > b.dis;
+    }
+};
+
+void dist_init() {
+    for (int y = 0; y < n; y++) {// dist 초기화
+        for (int x = 0; x < n; x++) {
+            dist[y][x] = INF;
+        }
+    }
+}
+
+void dijkstra() {
+    priority_queue<Point, vector<Point>, cmp> pq;
+    pq.push({0, 0, dist[0][0]});
+    while (!pq.empty()) {
+        auto cur = pq.top();
+        pq.pop();
+        if (cur.dis != dist[cur.y][cur.x]) {
+            continue;
+        }
+        for (int dir = 0; dir < 4; dir++) {
+            int nx = cur.x + dx[dir];
+            int ny = cur.y + dy[dir];
+            if (nx < 0 || ny < 0 || nx >= n || ny >= n) {
+                continue;
+            }
+            if (dist[ny][nx] > cur.dis + map[ny][nx]) {
+                dist[ny][nx] = cur.dis + map[ny][nx];
+                pq.push({ny, nx, dist[ny][nx]});
+            }
+        }
+    }
+}
+
+void print_test() {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << dist[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << '\n';
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int num = 1;
+    while (1) {
+
+        cin >> n;
+        if (n == 0) {
+            break;
+        }
+
+        dist_init();
+        for (int y = 0; y < n; y++) { // "도둑루피" 초기화
+            for (int x = 0; x < n; x++) {
+                cin >> map[y][x];
+            }
+        }
+        dist[0][0] = map[0][0];
+
+        dijkstra();
+//        print_test();
+        cout << "Problem " << num++ << ": " << dist[n - 1][n - 1] << '\n';
+
+    }
+}
